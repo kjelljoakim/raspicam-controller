@@ -30,8 +30,12 @@ input[type=number] {
 /* Remember to add or remove class="collapsed" to/from the elements
   which start out collapsed and not. Otherwise the icons will be wrong
   until a toggle has occured.  */
-.panel-heading .accordion-toggle.collapsed:after {
+.panel-heading.collapsed .accordion-toggle:after {
     content: "\e080";
+}
+
+.panel-heading {
+    cursor: pointer;
 }
 
 input[type=range] {

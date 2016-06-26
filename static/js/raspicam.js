@@ -1,7 +1,13 @@
 $(document).ready(function() {
   var MAX_FPS_1080 = 30
-  var MAX_FPS_720 = 49
+  var MIN_FPS_1080 = 1
+  var MAX_FPS_720 = 90
+  var MIN_FPS_720 = 40
   var MAX_FPS_480 = 90
+  var MIN_FPS_480 = 40
+
+  var $sliders = $("[type='range']")
+  var $numberBoxes = $(".slider-text")
 
   $(window).on('resize', function(event) {
     //TODO: Fixa col-md problem här. Mindre knappar osv. Hide
@@ -23,6 +29,7 @@ $(document).ready(function() {
       icon.addClass('glyphicon-play').removeClass('glyphicon-stop');
       button.contents().slice(2).replaceWith(" Stream");
     }
+    toggleOptionsOnRecord()
   });
 
   $('#recBtn').on('click', function(event) {
@@ -41,6 +48,7 @@ $(document).ready(function() {
       icon.addClass('glyphicon-record').removeClass('glyphicon-stop');
       button.contents().slice(2).replaceWith(" Record");
     }
+    toggleOptionsOnRecord()
   });
 
   $("[name='resolutions']").on('change', function(event) {
@@ -48,25 +56,29 @@ $(document).ready(function() {
     var btn = $(this)
     var id = btn.attr("id")
     var fps = $("#fps-slider")
+    var box = fps.siblings('.slider-text')
     var alertBox = $("#fps-alert")
-    var group = $(".fps-group")
+    var group = $("#fps-group")
     group.removeClass('hidden')
     alertBox.addClass('hidden')
     switch(id) {
       case "1080p":
-        fps.attr("max", MAX_FPS_1080).change()
+        console.log("hej")
+        box.attr({"max": MAX_FPS_1080, "min": MIN_FPS_1080});
+        fps.attr({"max" : MAX_FPS_1080, "min" : MIN_FPS_1080}).change()
         break
       case "720p":
-        fps.attr("max", MAX_FPS_720).change()
+        box.attr({"max": MAX_FPS_720, "min": MIN_FPS_1080});
+        fps.attr({"max" : MAX_FPS_720, "min" : MIN_FPS_720}).change()
         break
       case "480p":
-        fps.attr("max", MAX_FPS_480).change()
+        box.attr({"max": MAX_FPS_480, "min": MIN_FPS_480});
+        fps.attr({"max" : MAX_FPS_480, "min" : MIN_FPS_480}).change()
         break
       case "auto-res":
         //TODO: Fixa alerten vid medium. Wrappar konstigt
         alertBox.removeClass('hidden')
         group.addClass('hidden')
-        // $(".fps-group").addClass('hidden')
         break
       default:
         //TODO: Remove this or something
@@ -75,63 +87,87 @@ $(document).ready(function() {
     }
   });
 
-
-  $("[type='range']").on('input change', function(event) {
+  $sliders.on('input change', function(event) {
     var slider = $(this)
     var box = slider.siblings('.slider-text')
-    var fg = box.parent('.form-group')
-    if(fg.hasClass('has-error')) {
-      fg.addClass('has-success').removeClass('has-error')
-      box.removeClass('settings-error')
+
+    if(!box.hasClass('settings-success')) {
+      $numberBoxes.each(function(index, el) {
+        $(el).blur();
+      });
     }
-    box.val(slider.val())
+    clearSuccessBoxes()
+    box.addClass('settings-success')
+    box.val(slider.val()).change();
   });
 
-  $(".slider-text").on('input change', function(event) {
+  $numberBoxes.on('input change', function(event) {
     var box = $(this);
     var slider = box.siblings("[type='range']");
     var value = Number(box.val())
     var max = Number(box.attr("max"))
     var min = Number(box.attr("min"))
     var fg = box.parent('.form-group')
-    if(value < min || value > max || value == "") {
+
+    if(value < min || value > max || box.val() == "") {
       fg.addClass('has-error').removeClass('has-success')
       box.addClass('settings-error').removeClass('settings-success')
     } else if(fg.hasClass('has-error')) {
       fg.removeClass('has-error').addClass('has-success')
       box.removeClass('settings-error').addClass('settings-success')
     }
+    //Exposure modes are only available if ISO == 0 (auto)
+    if(slider.attr("name") == "iso") {
+      var exposure = $("[name='exposurelist']")
+      var alert = exposure.siblings('#iso-alert')
+      if(slider.val() != 0 || box.val() != 0) {
+        exposure.addClass('hidden')
+        alert.removeClass('hidden')
+      } else if(exposure.hasClass('hidden')) {
+        exposure.removeClass('hidden')
+        alert.addClass('hidden')
+      }
+    }
     slider.val(box.val())
   });
 
-  $(".slider-text").on('focus', function(event) {
+  $numberBoxes.on('focus', function(event) {
     var box = $(this);
     var value = Number(box.val())
     var max = Number(box.attr("max"))
     var min = Number(box.attr("min"))
+    clearSuccessBoxes()
     if((value >= min || value <= max)) {
       box.addClass('settings-success')
     }
   });
 
-  $(".slider-text").on('blur', function(event) {
+  $numberBoxes.on('blur', function(event) {
     var box = $(this)
     if(box.hasClass('settings-success')) {
       box.removeClass('settings-success')
     }
   });
 
+
   $('#applyBtn').on('click', function(event) {
     var res = $("[name='resolutions']:checked").val();
-    console.log(res);
     //Kalla på submit? Om submit ens ska finnas
   });
 
-  $(".video-form").on('submit', function(event) {
-    //Ajax och skicka till server för uppdatering
-    //Eller ska man måste fylla i allt först och sedan apply?
-    console.log("ApplyBTn plz")
-    event.preventDefault();
-  });
+  function clearSuccessBoxes() {
+    $numberBoxes.each(function(index, element) {
+      $(element).removeClass('settings-success')
+      //$(element).blur();
+    });
+  }
+
+  function toggleOptionsOnRecord() {
+    var options = $(".disable-when-recording")
+    options.each(function(index, element) {
+      $(element).toggleClass('hidden')
+      $(element).siblings('.rec-alert').toggleClass('hidden')
+    });
+  }
 
 });

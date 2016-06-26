@@ -1,70 +1,75 @@
 <!DOCTYPE html>
-	<head>
-		<title>Raspberry Pi Status</title>
-		<link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
-		<style>
-			body {
-			background-color: #1C1C1C;
-			font-family: 'Oswald', sans-serif;
-			}
 
-			#container {
-			width: 100%;
-			max-width: 600px;
-			margin: 20px auto;
-			padding-top: 10px;
-			background-color: #ffb3d9;
-			}
+<head>
+    <title>Raspberry Pi Status</title>
+    <link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css'>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+    <style>
+        body {
+            background-color: #1C1C1C;
+            font-family: 'Oswald', sans-serif;
+        }
 
-			#details {
-			display:block;
-			padding:10px;
-			}
+        #container {
+            width: 100%;
+            max-width: 600px;
+            margin: 20px auto;
+            padding-top: 10px;
+            background-color: #ffb3d9;
+        }
 
-			#logo {
-			background-image: url("/static/rpi.png");
-			background-size: auto 150px;
-			background-repeat: no-repeat;
-			height: 150px;
-			width: 125px;
-			margin: 0px auto;
-			}
+        #details {
+            display: block;
+            padding: 10px;
+        }
 
-			.detailItem {
-			padding: 5px;
-			margin: 10px;
-			background-color: #ffffff;
+        #logo {
+            background-image: url("/static/rpi.png");
+            background-size: auto 150px;
+            background-repeat: no-repeat;
+            height: 150px;
+            width: 125px;
+            margin: 0px auto;
+        }
+
+        .detailItem {
+            padding: 5px;
+            margin: 10px;
+            background-color: #ffffff;
             border-radius: 5%;
-			vertical-align:middle;
-			}
+            vertical-align: middle;
+        }
 
-			#ramBar {
-			width:100%;
-			height: 20px;
-			background-color:#75a928;
-			}
+        #ramBar {
+            width: 100%;
+            height: 20px;
+            background-color: #75a928;
+        }
 
-			#ramFill {
-			float:left;
-			width: ''' + ram_percent + '''%;
-			height:100%;
-			background-color:#bc1142;
-			}
-		</style>
-	</head>
-	<body>
-		<div id="container">
-			<div id="logo"></div>
-			<div id="details">
+        #ramFill {
+            float: left;
+            width: ''' + ram_percent + '''%;
+            height: 100%;
+            background-color: #bc1142;
+        }
+    </style>
+</head>
 
-				<div class="detailItem">Hostname: </div>
-				<div class="detailItem">Uptime: </div>
-				<div class="detailItem">CPU Temp:</div>
-				<div class="detailItem">Google Ping:</div>
-				<div class="detailItem">DNS Queries Today:</div>
-				<div class="detailItem">Last Updated:</div>
-		</div>
+<body>
+    <div id="container">
+        <div id="logo"></div>
+        <div id="details">
 
-	</body>
+            <div class="detailItem">Hostname: </div>
+            <div class="detailItem">Uptime: </div>
+            <div class="detailItem">CPU Temp:</div>
+            <div class="detailItem">Google Ping:</div>
+            <div class="detailItem">DNS Queries Today:</div>
+            <div class="detailItem">Last Updated:</div>
+        </div>
+</head>
+
+
+</body>
+
 </html>

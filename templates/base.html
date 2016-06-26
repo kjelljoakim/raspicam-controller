@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Raspberry Pi Camera Controller</title>
+
+    <!-- Bootstrap -->
+
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet" >
+    <link href="{{ url_for('static', filename='css/raspicam.css') }}" rel="stylesheet">
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="{{ url_for('static', filename='js/raspicam.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap-switch.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top">
+      <!-- TODO: Fixa navbar för ipad. Wrappar konstigt. Kanske padding bara för att lösa?-->
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">raspicam-controller</a>
+        </div>
+        <div class="collapse navbar-collapse" id="myNavbar">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="#video-settings">VIEW STREAM</a></li>
+            <li><a href="#stream">VIEW RECORDINGS</a></li>
+            <li><a href="#camera-settings">CAMERA-SETTINGS</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <div class="container">
+      <div class="jumbotron">
+        <img id ="logo"class="img-responsive center-block" src="static/rpi-smaller.png" alt="Pi">
+      </div>
+    </div>
+
+    <div class="container control-btns text-center">
+      <button type="button" class="btn btn-block btn-default btn-lg" id="recBtn">
+        <span class="btn-icon-right glyphicon glyphicon-record"></span> Record
+      </button>
+      <button type="button" class="btn btn-block btn-default btn-lg" id="playBtn">
+        <span class="btn-icon-right glyphicon glyphicon-play"></span> Stream
+      </button>
+    </div>
+    <div class="container">
+      <div class="panel-group" id="accordion">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h4 class="panel-title">
+              <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapse1">VIDEO SETTINGS</a>
+            </h4>
+          </div>
+          <div id="collapse1" class="panel-collapse collapse">
+            <div class="panel-body">
+            <!-- TODO: Byt till Dropdown? -->
+            <!-- TODO: Varför är dessa labels? -->
+              <div class="row">
+                <!-- <div class="col-xs-6">
+                  <h4>Resolution:</h4>
+                  <select class="form-control btn-block" name="resolutionList">
+                    <option selected>1080p</option>
+                    <option>720p</option>
+                    <option>480p</option>
+                    <option>auto</option>
+                  </select>
+                </div> -->
+                <div class="resolution-btn-group btn-group col-xs-12 col-sm-6 col-lg-4" data-toggle="buttons">
+                  <h4>Resolution:</h4>
+                  <label class="btn btn-default active btn-lg">1080p
+                    <input type="radio" name="resolutions" id="1080p" value="1080" autocomplete="off" checked>
+                  </label>
+                  <label class="btn btn-default btn-lg">720p
+                    <input type="radio" name="resolutions" id="720p" value="720" autocomplete="off">
+                  </label>
+                  <label class="btn btn-default btn-lg">480p
+                    <input type="radio" name="resolutions" id="480p" value="480" autocomplete="off">
+                  </label>
+                  <label class="btn btn-default btn-lg">Auto
+                    <input type="radio" name="resolutions" id="auto-res" value="auto" autocomplete="off">
+                  </label>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-lg-4">
+                  <h4>Bitrate (Mbits/s):</h4>
+                  <div class="bitrate-group form-group has-success">
+                    <input type="range" id="bitrate-slider" name="bitrate" min="1" max="25" value="15">
+                    <input type="number" class="slider-text form-control" min="1" max="25" value="15" required>
+                  </div>
+                  <div class="hidden alert alert-warning" id="bitrate-alert" role="alert">Auto resolution disables bitrate selection.</div>
+                </div>
+                <div class="clearfix visible-sm-block"></div>
+                <div class="col-xs-12 col-sm-6 col-lg-4">
+                  <h4>Framerate:</h4>
+                  <div class="fps-group form-group has-success">
+                    <input type="range" id="fps-slider" name="framerate" min="1" max="30" value="30">
+                    <input type="number" class="slider-text form-control" min="1" max="30" value="30" required>
+                  </div>
+                  <div class="hidden alert alert-warning" id="fps-alert" role="alert">Auto resolution disables framerate selection.</div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-lg-4">
+                  <h4>Brightness:</h4>
+                  <div class="form-group has-success">
+                    <input type="range" name="saturation" min="0" max="100" value="50">
+                    <input type="number" class="slider-text form-control" min="0" max="100" value="50" required>
+                  </div>
+                </div>
+                <div class="clearfix visible-sm-block"></div>
+                <div class="clearfix visible-md-block"></div>
+                <div class="col-xs-12 col-sm-6 col-lg-4">
+                  <h4>Saturation:</h4>
+                  <div class="form-group has-success">
+                    <input type="range" name="saturation" min="-100" max="100" value="0">
+                    <input type="number" class="slider-text form-control" id="saturation" min="-100" max="100" value="0" required>
+                  </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-lg-4">
+                  <h4>Sharpness:</h4>
+                  <div class="form-group has-success">
+                    <input type="range" name="sharpness" min="-100" max="100" value="0">
+                    <input type="number" class="slider-text form-control"min="-100" max="100" value="0" required>
+                  </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-lg-4">
+                  <h4>Contrast:</h4>
+                  <div class="form-group has-success">
+                    <input type="range" name="contrast" min="-100" max="100" value="0">
+                    <input type="number" class="slider-text form-control"min="-100" max="100" value="0" required>
+                  </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-lg-4">
+                  <h4>EV:</h4>
+                  <div class="form-group has-success">
+                    <input type="range" name="ev" min="-10" max="10" value="0">
+                    <input type="number" class="slider-text form-control"min="-10" max="10" value="0" required>
+                  </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-lg-4">
+                  <h4>ISO:</h4>
+                  <div class="form-group has-success">
+                    <input type="range" name="iso" min="100" max="800" value="100">
+                    <input type="number" class="slider-text form-control"min="100" max="800" value="100" required>
+                  </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-lg-4">
+                  <div class="row">
+                    <div class="col-xs-6">
+                      <h4>Exposure Mode:</h4>
+                      <select class="form-control dropdowns" name="exposurelist">
+                        <option selected>auto</option>
+                        <option>night</option>
+                        <option>nightpreview</option>
+                        <option>backlight</option>
+                        <option>spotlight</option>
+                        <option>sports</option>
+                        <option>snow</option>
+                        <option>beach</option>
+                        <option>verylong</option>
+                        <option>fixedfps</option>
+                        <option>antishake</option>
+                        <option>fireworks</option>
+                      </select>
+                    </div>
+                    <div class="col-xs-6">
+                      <h4>AWB Mode:</h4>
+                      <select class="form-control dropdowns" name="awblist">
+                        <option>off</option>
+                        <option selected>auto</option>
+                        <option>sun</option>
+                        <option>cloud</option>
+                        <option>shade</option>
+                        <option>tungsten</option>
+                        <option>fluorescent</option>
+                        <option>incandescent</option>
+                        <option>flash</option>
+                        <option>horizon</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <div class="clearfix visible-sm-block"></div>
+                <div class="clearfix visible-md-block"></div>
+                <div class="col-xs-12 col-sm-6 col-lg-4">
+                  <div class="row">
+                    <div class="col-xs-6">
+                      <h4>Video Stabilisation:</h4>
+                      <select class="form-control dropdowns" name="vstab">
+                        <option>on</option>
+                        <option selected>off</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h4 class="panel-title">
+              <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapse2">EFFECTS</a>
+            </h4>
+          </div>
+          <div id="collapse2" class="panel-collapse collapse">
+
+            <div class="panel-body">
+              <div class="row">
+                <div class="col-xs-12 col-sm-6 col-lg-4">
+                  <div class="row">
+                    <div class="col-xs-6">
+                      <h4>Image effect:</h4>
+                      <select class="form-control dropdowns" name="imgEffects">
+                        <option selected>none</option>
+                        <option>negative</option>
+                        <option>solarise</option>
+                        <option>posterise</option>
+                        <option>whiteboard</option>
+                        <option>blackboard</option>
+                        <option>sketch</option>
+                        <option>denoise</option>
+                        <option>emboss</option>
+                        <option>oilpaint</option>
+                        <option>hatch</option>
+                        <option>gpen</option>
+                        <option>pastel</option>
+                        <option>watercolour</option>
+                        <option>film</option>
+                        <option>saturation</option>
+                        <option>colourswap</option>
+                        <option>washedout</option>
+                        <option>colourpoint</option>
+                        <option>colourbalance</option>
+                        <option>cartoon</option>
+                      </select>
+                    </div>
+                    <div class="col-xs-6">
+                      <h4>Flip image:</h4>
+                      <select class="form-control dropdowns" name="flip">
+                        <option selected>none</option>
+                        <option>Horizontal flip</option>
+                        <option>Vertical flip</option>
+                        <option>Both</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-lg-4">
+                  <h4>Color effects (U/Y Channels):</h4>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h4 class="panel-title">
+              <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapse3">CAMERA SETTINGS</a>
+            </h4>
+          </div>
+          <div id="collapse3" class="panel-collapse collapse">
+
+            <div class="panel-body">Lorem ipsum dolor sit amet, consectetur adipisicing elit,
+            sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+            quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="container text-left">
+      <button type="button" class="btn btn-block btn-default btn-lg" id="applyBtn">
+        <span class="glyphicon glyphicon-check"></span> Apply settings
+      </button>
+    </div>
+{% block body %}
+{% endblock %}
+  </body>
+</html>

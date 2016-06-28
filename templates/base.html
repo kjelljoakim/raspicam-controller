@@ -70,173 +70,164 @@
           </div>
           <div id="collapse1" class="panel-collapse collapse">
             <div class="panel-body">
-            <!-- TODO: Byt till Dropdown? -->
-            <!-- TODO: Varför är dessa labels? -->
-              <div class="row">
+              <form>
+                <div class="row">
 
-                <!-- <div class="col-xs-6">
-                  <h4>Resolution:</h4>
-                  <select class="form-control btn-block" name="resolutionList">
-                    <option selected>1080p</option>
-                    <option>720p</option>
-                    <option>480p</option>
-                    <option>auto</option>
-                  </select>
-                </div> -->
-
-                <div class="col-xs-12 col-sm-6 col-lg-4">
-                  <h4>Resolution:</h4>
-                  <div class="resolution-btn-group btn-group disable-when-recording" data-toggle="buttons">
-                    <label class="btn btn-default btn-lg">1080p
-                      <input type="radio" name="resolutions" id="1080p" value="1080" autocomplete="off">
-                    </label>
-                    <label class="btn btn-default active btn-lg">720p
-                      <input type="radio" name="resolutions" id="720p" value="720" autocomplete="off" checked>
-                    </label>
-                    <label class="btn btn-default btn-lg">480p
-                      <input type="radio" name="resolutions" id="480p" value="480" autocomplete="off">
-                    </label>
-                    <label class="btn btn-default btn-lg">Auto
-                      <input type="radio" name="resolutions" id="auto-res" value="auto" autocomplete="off">
-                    </label>
+                  <div class="col-xs-12 col-sm-6 col-lg-4">
+                    <h4>Resolution:</h4>
+                    <div class="resolution-btn-group btn-group disable-when-recording" data-toggle="buttons">
+                      <!-- TODO: Varför är dessa labels? -->
+                      <label class="btn btn-default btn-lg">1080p
+                        <input type="radio" name="resolution" id="1080p" value="1080" autocomplete="off">
+                      </label>
+                      <label class="btn btn-default active btn-lg">720p
+                        <input type="radio" name="resolution" id="720p" value="720" autocomplete="off" checked>
+                      </label>
+                      <label class="btn btn-default btn-lg">480p
+                        <input type="radio" name="resolution" id="480p" value="480" autocomplete="off">
+                      </label>
+                      <label class="btn btn-default btn-lg">Auto
+                        <input type="radio" name="resolution" id="auto-res" value="auto" autocomplete="off">
+                      </label>
+                    </div>
+                    <div class="hidden alert rec-alert alert-warning" role="alert">This option cannot be changed while recording.</div>
                   </div>
-                  <div class="hidden alert rec-alert alert-warning" role="alert">This option cannot be changed while recording.</div>
-                </div>
 
-                <div class="col-xs-12 col-sm-6 col-lg-4">
-                  <h4>Quality:</h4>
-                  <div class="disable-when-recording form-group has-success">
-                    <input type="range" id="qual-slider" name="quality" min="10" max="40" value="20">
-                    <input type="number" class="slider-text form-control" min="10" max="40" value="20" required>
+                  <div class="col-xs-12 col-sm-6 col-lg-4">
+                    <h4>Quality:</h4>
+                    <div class="disable-when-recording form-group has-success">
+                      <input type="range" id="qual-slider" name="quality" min="10" max="40" value="20">
+                      <input type="number" class="slider-text form-control" min="10" max="40" value="20" required>
+                    </div>
+                    <div class="hidden alert rec-alert alert-warning" id="quality-alert" role="alert">This option cannot be changed while recording.</div>
                   </div>
-                  <div class="hidden alert rec-alert alert-warning" id="quality-alert" role="alert">This option cannot be changed while recording.</div>
-                </div>
 
-                <div class="col-xs-12 col-sm-6 col-lg-4">
-                  <h4>Bitrate (Mbits/s):</h4>
-                  <div class="disable-when-recording form-group has-success">
-                    <input type="range" id="bitrate-slider" name="bitrate" min="0" max="25" value="17">
-                    <input type="number" class="slider-text form-control" min="0" max="25" value="17" required>
+                  <div class="col-xs-12 col-sm-6 col-lg-4">
+                    <h4>Bitrate (Mbits/s):</h4>
+                    <div class="disable-when-recording form-group has-success">
+                      <input type="range" id="bitrate-slider" name="bitrate" min="0" max="25" value="17">
+                      <input type="number" class="slider-text form-control" min="0" max="25" value="17" required>
+                    </div>
+                    <div class="hidden alert rec-alert alert-warning" id="bitrate-alert" role="alert">This option cannot be changed while recording.</div>
+                    <div class="hidden alert alert-warning" id="bitrate-alert" role="alert">Disabled by auto resolution.</div>
                   </div>
-                  <div class="hidden alert rec-alert alert-warning" id="bitrate-alert" role="alert">This option cannot be changed while recording.</div>
-                  <div class="hidden alert alert-warning" id="bitrate-alert" role="alert">Disabled by auto resolution.</div>
-                </div>
 
-                <div class="col-xs-12 col-sm-6 col-lg-4">
-                  <h4>Framerate:</h4>
-                  <div class="disable-when-recording form-group has-success" id="fps-group">
-                    <input type="range" id="fps-slider" name="framerate" min="40" max="90" value="60">
-                    <input type="number" class="slider-text form-control" min="40" max="90" value="60" required>
+                  <div class="col-xs-12 col-sm-6 col-lg-4">
+                    <h4>Framerate:</h4>
+                    <div class="disable-when-recording form-group has-success" id="fps-group">
+                      <input type="range" id="fps-slider" name="framerate" min="40" max="90" value="60">
+                      <input type="number" class="slider-text form-control" min="40" max="90" value="60" required>
+                    </div>
+                    <div class="hidden alert alert-warning" id="fps-alert" role="alert">Disabled by auto resolution.</div>
+                    <div class="hidden alert rec-alert alert-warning" id="fps-alert2" role="alert">This option cannot be changed while recording.</div>
                   </div>
-                  <div class="hidden alert alert-warning" id="fps-alert" role="alert">Disabled by auto resolution.</div>
-                  <div class="hidden alert rec-alert alert-warning" id="fps-alert2" role="alert">This option cannot be changed while recording.</div>
-                </div>
 
-                <div class="col-xs-12 col-sm-6 col-lg-4">
-                  <h4>Brightness:</h4>
-                  <div class="form-group has-success">
-                    <input type="range" name="brightness" min="0" max="100" value="50">
-                    <input type="number" class="slider-text form-control" min="0" max="100" value="50" required>
+                  <div class="col-xs-12 col-sm-6 col-lg-4">
+                    <h4>Brightness:</h4>
+                    <div class="form-group has-success">
+                      <input type="range" name="brightness" min="0" max="100" value="50">
+                      <input type="number" class="slider-text form-control" min="0" max="100" value="50" required>
+                    </div>
                   </div>
-                </div>
 
-                <div class="col-xs-12 col-sm-6 col-lg-4">
-                  <h4>Saturation:</h4>
-                  <div class="form-group has-success">
-                    <input type="range" name="saturation" min="-100" max="100" value="0">
-                    <input type="number" class="slider-text form-control" id="saturation" min="-100" max="100" value="0" required>
+                  <div class="col-xs-12 col-sm-6 col-lg-4">
+                    <h4>Saturation:</h4>
+                    <div class="form-group has-success">
+                      <input type="range" name="saturation" min="-100" max="100" value="0">
+                      <input type="number" class="slider-text form-control" id="saturation" min="-100" max="100" value="0" required>
+                    </div>
                   </div>
-                </div>
-                <div class="clearfix visible-lg-block"></div>
+                  <div class="clearfix visible-lg-block"></div>
 
-                <div class="col-xs-12 col-sm-6 col-lg-4">
-                  <h4>Sharpness:</h4>
-                  <div class="form-group has-success">
-                    <input type="range" name="sharpness" min="-100" max="100" value="0">
-                    <input type="number" class="slider-text form-control"min="-100" max="100" value="0" required>
+                  <div class="col-xs-12 col-sm-6 col-lg-4">
+                    <h4>Sharpness:</h4>
+                    <div class="form-group has-success">
+                      <input type="range" name="sharpness" min="-100" max="100" value="0">
+                      <input type="number" class="slider-text form-control"min="-100" max="100" value="0" required>
+                    </div>
                   </div>
-                </div>
 
-                <div class="col-xs-12 col-sm-6 col-lg-4">
-                  <h4>Contrast:</h4>
-                  <div class="form-group has-success">
-                    <input type="range" name="contrast" min="-100" max="100" value="0">
-                    <input type="number" class="slider-text form-control"min="-100" max="100" value="0" required>
+                  <div class="col-xs-12 col-sm-6 col-lg-4">
+                    <h4>Contrast:</h4>
+                    <div class="form-group has-success">
+                      <input type="range" name="contrast" min="-100" max="100" value="0">
+                      <input type="number" class="slider-text form-control"min="-100" max="100" value="0" required>
+                    </div>
                   </div>
-                </div>
 
-                <div class="col-xs-12 col-sm-6 col-lg-4">
-                  <h4>EV Compensation:</h4>
-                  <div class="form-group has-success">
-                    <input type="range" name="ev" min="-25" max="25" value="0">
-                    <input type="number" class="slider-text form-control"min="-25" max="25" value="0" required>
+                  <div class="col-xs-12 col-sm-6 col-lg-4">
+                    <h4>EV Compensation:</h4>
+                    <div class="form-group has-success">
+                      <input type="range" name="ev" min="-25" max="25" value="0">
+                      <input type="number" class="slider-text form-control"min="-25" max="25" value="0" required>
+                    </div>
                   </div>
-                </div>
 
-                <div class="col-xs-12 col-sm-6 col-lg-4">
-                  <h4>ISO:</h4>
-                  <div class="form-group has-success">
-                    <input type="range" name="iso" min="0" max="800" step="100" value="0">
-                    <input type="number" class="slider-text form-control" min="0" max="800" value="0" required>
+                  <div class="col-xs-12 col-sm-6 col-lg-4">
+                    <h4>ISO:</h4>
+                    <div class="form-group has-success">
+                      <input type="range" name="iso" min="0" max="800" step="100" value="0">
+                      <input type="number" class="slider-text form-control" min="0" max="800" value="0" required>
+                    </div>
                   </div>
-                </div>
 
-                <div class="col-xs-6 col-sm-3 col-lg-2">
-                  <h4>Exposure Mode:</h4>
-                  <select class="form-control dropdowns" name="exposurelist">
-                    <option selected>auto</option>
-                    <option>night</option>
-                    <option>nightpreview</option>
-                    <option>backlight</option>
-                    <option>spotlight</option>
-                    <option>sports</option>
-                    <option>snow</option>
-                    <option>beach</option>
-                    <option>verylong</option>
-                    <option>fixedfps</option>
-                    <option>antishake</option>
-                    <option>fireworks</option>
-                  </select>
-                  <div class="hidden alert alert-warning" id="iso-alert" role="alert">ISO not in auto.</div>
-                </div>
+                  <div class="col-xs-6 col-sm-3 col-lg-2">
+                    <h4>Exposure Mode:</h4>
+                    <select class="form-control dropdowns" name="exposure">
+                      <option selected>auto</option>
+                      <option>night</option>
+                      <option>nightpreview</option>
+                      <option>backlight</option>
+                      <option>spotlight</option>
+                      <option>sports</option>
+                      <option>snow</option>
+                      <option>beach</option>
+                      <option>verylong</option>
+                      <option>fixedfps</option>
+                      <option>antishake</option>
+                      <option>fireworks</option>
+                    </select>
+                    <div class="hidden alert alert-warning" id="iso-alert" role="alert">ISO not in auto.</div>
+                  </div>
 
-                <div class="col-xs-6 col-sm-3 col-lg-2">
-                  <h4>AWB Mode:</h4>
-                  <select class="form-control dropdowns" name="awblist">
-                    <option>off</option>
-                    <option selected>auto</option>
-                    <option>sun</option>
-                    <option>cloud</option>
-                    <option>shade</option>
-                    <option>tungsten</option>
-                    <option>fluorescent</option>
-                    <option>incandescent</option>
-                    <option>flash</option>
-                    <option>horizon</option>
-                  </select>
-                </div>
+                  <div class="col-xs-6 col-sm-3 col-lg-2">
+                    <h4>AWB Mode:</h4>
+                    <select class="form-control dropdowns" name="awb">
+                      <option>off</option>
+                      <option selected>auto</option>
+                      <option>sun</option>
+                      <option>cloud</option>
+                      <option>shade</option>
+                      <option>tungsten</option>
+                      <option>fluorescent</option>
+                      <option>incandescent</option>
+                      <option>flash</option>
+                      <option>horizon</option>
+                    </select>
+                  </div>
 
-                <div class="col-xs-7 col-sm-4 col-lg-2">
-                  <h4>Video Stabilisation:</h4>
-                  <select class="form-control dropdowns" name="vstab">
-                    <option>on</option>
-                    <option selected>off</option>
-                  </select>
-                </div>
+                  <div class="col-xs-7 col-sm-4 col-lg-2">
+                    <h4>Video Stabilisation:</h4>
+                    <select class="form-control dropdowns" name="vstab">
+                      <option>on</option>
+                      <option selected>off</option>
+                    </select>
+                  </div>
 
-                <div class="col-xs-5 col-sm-2 col-lg-2">
-                  <h4>Flash:</h4>
-                  <select class="form-control dropdowns" name="flash">
-                    <option selected>off</option>
-                    <option>auto</option>
-                    <option>on</option>
-                    <option>redeye</option>
-                    <option>fillin</option>
-                    <option>torch</option>
-                  </select>
-                </div>
+                  <div class="col-xs-5 col-sm-2 col-lg-2">
+                    <h4>Flash:</h4>
+                    <select class="form-control dropdowns" name="flash">
+                      <option selected>off</option>
+                      <option>auto</option>
+                      <option>on</option>
+                      <option>redeye</option>
+                      <option>fillin</option>
+                      <option>torch</option>
+                    </select>
+                  </div>
 
-              </div>
+                </div>
+              </form>
             </div>
           </div>
 
@@ -250,67 +241,69 @@
           <div id="collapse2" class="panel-collapse collapse">
 
             <div class="panel-body">
-              <div class="row">
-                <div class="col-xs-12 col-lg-4">
-                  <div class="row">
-                    <div class="col-xs-6">
-                      <!-- TODO: Ta bort de som inte stödjer video eller lägg till alerts på dessa om bilder ska stödjas.-->
-                      <h4>Image effect:</h4>
-                      <select class="form-control dropdowns" name="imgEffects">
-                        <option selected>none</option>
-                        <option>negative</option>
-                        <option>solarise</option>
-                        <option>posterise</option>
-                        <option>whiteboard</option>
-                        <option>blackboard</option>
-                        <option>sketch</option>
-                        <option>denoise</option>
-                        <option>emboss</option>
-                        <option>oilpaint</option>
-                        <option>hatch</option>
-                        <option>gpen</option>
-                        <option>pastel</option>
-                        <option>watercolour</option>
-                        <option>film</option>
-                        <option>saturation</option>
-                        <option>colourswap</option>
-                        <option>washedout</option>
-                        <option>colourpoint</option>
-                        <option>colourbalance</option>
-                        <option>cartoon</option>
-                      </select>
-                    </div>
-                    <div class="col-xs-6">
-                      <h4>Flip image:</h4>
-                      <select class="form-control dropdowns" name="flip">
-                        <option selected>none</option>
-                        <option>Horizontal flip</option>
-                        <option>Vertical flip</option>
-                        <option>Both</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-xs-12 col-lg-8">
-                  <h4>Color effects (U/Y Channels):</h4>
-                  <div class="row">
-                    <div class="col-xs-12 col-sm-6">
-                      <h4>U-Channel:</h4>
-                      <div class="form-group has-success">
-                        <input type="range" id="u-slider" name="uchannel" min="0" max="255" value="0">
-                        <input type="number" class="slider-text form-control" min="0" max="255" value="0" required>
+              <form>
+                <div class="row">
+                  <div class="col-xs-12 col-lg-4">
+                    <div class="row">
+                      <div class="col-xs-6">
+                        <!-- TODO: Ta bort de som inte stödjer video eller lägg till alerts på dessa om bilder ska stödjas.-->
+                        <h4>Image effect:</h4>
+                        <select class="form-control dropdowns" name="image-effects">
+                          <option selected>none</option>
+                          <option>negative</option>
+                          <option>solarise</option>
+                          <option>posterise</option>
+                          <option>whiteboard</option>
+                          <option>blackboard</option>
+                          <option>sketch</option>
+                          <option>denoise</option>
+                          <option>emboss</option>
+                          <option>oilpaint</option>
+                          <option>hatch</option>
+                          <option>gpen</option>
+                          <option>pastel</option>
+                          <option>watercolour</option>
+                          <option>film</option>
+                          <option>saturation</option>
+                          <option>colourswap</option>
+                          <option>washedout</option>
+                          <option>colourpoint</option>
+                          <option>colourbalance</option>
+                          <option>cartoon</option>
+                        </select>
                       </div>
-                    </div>
-                    <div class="col-xs-12 col-sm-6">
-                      <h4>Y-Channel:</h4>
-                      <div class="form-group has-success">
-                        <input type="range" id="y-slider" name="ychannel" min="0" max="255" value="0">
-                        <input type="number" class="slider-text form-control" min="0" max="255" value="0" required>
+                      <div class="col-xs-6">
+                        <h4>Flip image:</h4>
+                        <select class="form-control dropdowns" name="flip">
+                          <option selected>none</option>
+                          <option>Horizontal flip</option>
+                          <option>Vertical flip</option>
+                          <option>Both</option>
+                        </select>
                       </div>
                     </div>
                   </div>
+                  <div class="col-xs-12 col-lg-8">
+                    <h4>Color effects (U/Y Channels):</h4>
+                    <div class="row">
+                      <div class="col-xs-12 col-sm-6">
+                        <h4>U-Channel:</h4>
+                        <div class="form-group has-success">
+                          <input type="range" id="u-slider" name="uchannel" min="0" max="255" value="0">
+                          <input type="number" class="slider-text form-control" min="0" max="255" value="0" required>
+                        </div>
+                      </div>
+                      <div class="col-xs-12 col-sm-6">
+                        <h4>Y-Channel:</h4>
+                        <div class="form-group has-success">
+                          <input type="range" id="y-slider" name="ychannel" min="0" max="255" value="0">
+                          <input type="number" class="slider-text form-control" min="0" max="255" value="0" required>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              </div>
+              </form>
             </div>
           </div>
 
@@ -324,57 +317,67 @@
           <div id="collapse3" class="panel-collapse collapse">
 
             <div class="panel-body">
-              <div class="row">
-
-                <div class="col-xs-12 col-sm-6 col-lg-4">
-                  <h4>Dynamic Range Compression:</h4>
-                  <select class="disable-when-recording form-control dropdowns" name="drc">
-                    <option selected>off</option>
-                    <option>low</option>
-                    <option>medium</option>
-                    <option>high</option>
-                  </select>
-                  <div class="hidden alert rec-alert alert-warning" id="quality-alert" role="alert">This option cannot be changed while recording.</div>
-                </div>
-
-                <div class="col-xs-6 col-sm-3 col-lg-2">
-                  <h4>Metering mode:</h4>
-                  <select class="form-control dropdowns" name="metering">
-                    <option selected>average</option>
-                    <option>spot</option>
-                    <option>backlit</option>
-                    <option>matrix</option>
-                  </select>
-                </div>
-
-                <div class="col-xs-6 col-sm-3 col-lg-2">
-                  <h4>Image denoise:</h4>
-                  <select class="form-control dropdowns" name="denoise">
-                    <option selected>on</option>
-                    <option>off</option>
-                  </select>
-                </div>
-                <div class="clearfix visible-md-block"></div>
-                <div class="clearfix visible-sm-block"></div>
-
-                <div class="col-xs-12 col-sm-6 col-lg-4">
-                  <div class="form-group has-success">
-                    <h4>Shutter speed (milliseconds):</h4>
-                    <input type="range" name="shutter" min="0" max="6000" step="100" value="0">
-                    <input type="number" class="slider-text form-control"min="0" max="6000" value="0" required>
+              <form>
+                <div class="row">
+                  <div class="col-xs-12 col-sm-6 col-lg-4">
+                    <h4>Dynamic Range Compression:</h4>
+                    <select class="disable-when-recording form-control dropdowns" name="drc">
+                      <option selected>off</option>
+                      <option>low</option>
+                      <option>medium</option>
+                      <option>high</option>
+                    </select>
+                    <div class="hidden alert rec-alert alert-warning" id="quality-alert" role="alert">This option cannot be changed while recording.</div>
                   </div>
-                </div>
-                <div class="clearfix visible-lg-block"></div>
 
-                <div class="col-xs-6 col-sm-3 col-lg-2">
-                  <h4>LED:</h4>
-                  <select class="form-control dropdowns" name="led">
-                    <option selected>off</option>
-                    <option>on</option>
-                  </select>
-                </div>
+                  <div class="col-xs-6 col-sm-3 col-lg-2">
+                    <h4>Metering mode:</h4>
+                    <select class="form-control dropdowns" name="metering">
+                      <option selected>average</option>
+                      <option>spot</option>
+                      <option>backlit</option>
+                      <option>matrix</option>
+                    </select>
+                  </div>
 
-              </div>
+                  <div class="col-xs-6 col-sm-3 col-lg-2">
+                    <h4>Image denoise:</h4>
+                    <select class="form-control dropdowns" name="denoise">
+                      <option selected>on</option>
+                      <option>off</option>
+                    </select>
+                  </div>
+                  <div class="clearfix visible-md-block"></div>
+                  <div class="clearfix visible-sm-block"></div>
+
+                  <div class="col-xs-12 col-sm-6 col-lg-4">
+                    <div class="form-group has-success">
+                      <h4>Shutter speed (milliseconds):</h4>
+                      <input type="range" name="shutter" min="0" max="6000" step="100" value="0">
+                      <input type="number" class="slider-text form-control"min="0" max="6000" value="0" required>
+                    </div>
+                  </div>
+                  <div class="clearfix visible-lg-block"></div>
+
+                  <div class="col-xs-6 col-sm-3 col-lg-2">
+                    <h4>LED:</h4>
+                    <select class="form-control dropdowns" name="led">
+                      <option selected>off</option>
+                      <option>on</option>
+                    </select>
+                  </div>
+
+                  <div class="col-xs-6 col-sm-3 col-lg-2">
+                    <!-- TODO: Bara den som startat en record for ändra/stoppa? mha cookies-->
+                    <h4>mutex:</h4>
+                    <select class="form-control dropdowns" name="mutex">
+                      <option selected>off</option>
+                      <option>on</option>
+                    </select>
+                  </div>
+
+                </div>
+              </form>
             </div>
           </div>
 

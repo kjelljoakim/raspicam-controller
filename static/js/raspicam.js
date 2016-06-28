@@ -51,7 +51,7 @@ $(document).ready(function() {
     toggleOptionsOnRecord()
   });
 
-  $("[name='resolutions']").on('change', function(event) {
+  $("[name='resolution']").on('change', function(event) {
     //TODO: Gör en forEach och hidea bitrate också! Om det ska vara så
     var btn = $(this)
     var id = btn.attr("id")
@@ -118,7 +118,7 @@ $(document).ready(function() {
     }
     //Exposure modes are only available if ISO == 0 (auto)
     if(slider.attr("name") == "iso") {
-      var exposure = $("[name='exposurelist']")
+      var exposure = $("[name='exposure']")
       var alert = exposure.siblings('#iso-alert')
       if(slider.val() != 0 || box.val() != 0) {
         exposure.addClass('hidden')
@@ -151,9 +151,62 @@ $(document).ready(function() {
 
 
   $('#applyBtn').on('click', function(event) {
-    var res = $("[name='resolutions']:checked").val();
-    //Kalla på submit? Om submit ens ska finnas
+    var validSettings = true
+    $numberBoxes.each(function(index, setting) {
+      var min = Number(setting.min)
+      var max = Number(setting.max)
+      var value = Number(setting.value)
+      if(value < min || value > max) {
+        alert("FIXA ALERT MODAL!")
+        validSettings = false
+        return false
+      }
+    });
+    if(validSettings) {
+      var settings = $("form").serializeArray();
+      console.log(JSON.stringify(settings))
+      applySettingsAsync(settings)
+    }
   });
+
+  function applySettingsAsync(settings) {
+    console.log("Sending AJAX")
+    $.ajax({
+      url: '/record',
+      type: 'POST',
+      dataType: 'json',
+      data: JSON.stringify(settings),
+      contentType: 'application/json'
+    })
+    .done(function(response) {
+      console.log("success");
+      //startRecording
+    })
+    .fail(function() {
+      console.log("error");
+    })
+    .always(function(response) {
+      console.log(response);
+    });
+
+    console.log("direkt")
+
+    // $.post('/record', {"firstName": "Joakim", "lastName": "Karlsson"}, function(response) {
+    //   console.log("success")
+    //   if(response.recording) {
+    //     console.log("true")
+    //   } else {
+    //     console.log("false")
+    //   }
+    // }, "json");
+  }
+
+  function findMinMax(name) {
+    var element = $("[name='"+name+"']")
+    var min = $(element).attr("min")
+    var max = $(element).attr("max")
+    return {min, max}
+  }
 
   function clearSuccessBoxes() {
     $numberBoxes.each(function(index, element) {

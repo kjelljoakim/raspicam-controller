@@ -1,8 +1,11 @@
 from flask import Flask, render_template, jsonify, request
+from picamera import PiCamera
 from time import sleep
 
 app = Flask(__name__)
 settings = dict()
+camera = PiCamera()
+sleep(2)
 
 
 @app.route('/')

@@ -180,7 +180,11 @@ $(document).ready(function() {
     })
     .done(function(response) {
       console.log("success");
-      //startRecording
+      if(response.recording) {
+        //startRecording
+      } else {
+        //modal Alert
+      }
     })
     .fail(function() {
       console.log("error");

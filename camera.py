@@ -110,6 +110,8 @@ class CameraWrapper:
             return False
 
     def stop_recording(self):
+        # TODO: Handle if no recording is active. Can happen if pressing
+        # the record button several times when it is in loading state.
         self.camera.stop_recording()
         self.camera.close()
         return True

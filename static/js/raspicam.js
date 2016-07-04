@@ -43,6 +43,12 @@ $(document).ready(function() {
   function startRecording(recBtn) {
     var icon = recBtn.children(".glyphicon");
     var playBtn = recBtn.siblings('#playBtn');
+    icon.removeClass('glyphicon-record').addClass('fa fa-spinner fa-pulse fa-lg fa-fw')
+    recBtn.contents().slice(2).replaceWith(" Starting...");
+    //Add here so that click 'Starting...' button will send stop instead of
+    //another record.
+    recBtn.addClass('recording')
+    toggleOptionsOnRecord()
 
     $.ajax({
       url: '/record',
@@ -51,21 +57,29 @@ $(document).ready(function() {
     })
     .done(function(response) {
       if(response.recording) {
-        recBtn.addClass('recording');
         playBtn.prop('disabled', true)
         recBtn.addClass('btn-danger').removeClass('btn-default');
-        icon.addClass('glyphicon-stop').removeClass('glyphicon-record');
+        icon.addClass('glyphicon-stop')
         recBtn.contents().slice(2).replaceWith(" Stop");
-        toggleOptionsOnRecord()
       } else {
+        //TODO: Redundant? Use fail instead?
+        icon.addClass('glyphicon-record')
+        recBtn.removeClass('recording')
+        recBtn.contents().slice(2).replaceWith(" Record");
         alert("Recording not started due to failure!")
+        toggleOptionsOnRecord()
       }
     })
     .fail(function() {
+      icon.addClass('glyphicon-record')
+      recBtn.removeClass('recording')
+      recBtn.contents().slice(2).replaceWith(" Record");
+      alert("Recording not started due to failure!")
+      toggleOptionsOnRecord()
       console.log("error");
     })
     .always(function() {
-      console.log("complete");
+      icon.removeClass('fa fa-spinner fa-pulse fa-lg fa-fw');
     });
 
   }

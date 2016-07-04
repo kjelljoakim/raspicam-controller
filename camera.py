@@ -3,56 +3,59 @@ from time import sleep
 
 
 class CameraWrapper:
+
+    # TODO: Use PiCamera.EXPOSURE_MODE values etc instead. More dynamic
+    # Values exist for all 'modes' with more than on/off
+    ALLOWED_VALUES = {
+        'resolution': {'1080p', '720p', 'vga', 'auto'},
+        'quality': range(10, 40),
+        'bitrate': range(0, 25),
+        'framerate': range(0, 90),
+        'brightness': range(0, 100),
+        'saturation': range(-100, 100),
+        'sharpness': range(-100, 100),
+        'contrast': range(-100, 100),
+        'exposure_compensation': range(-25, 25),
+        'iso': range(0, 800),
+        'exposure_mode': {
+            'auto', 'night', 'nightpreview', 'backlight', 'spotlight',
+            'sports', 'snow', 'beach', 'verylong', 'fixedfps', 'antishake',
+            'fireworks'},
+        'awb_mode': {
+            'auto', 'cloudy', 'shade', 'tungsten', 'fluorescent',
+            'incandescent', 'flash', 'horizon', 'sunlight', 'off'},
+        'video_stabilization': {'off', 'on'},
+        'flash_mode': {
+            'off', 'on', 'redeye', 'auto', 'fillin', 'torch'},
+        'image_effect': {
+            'none', 'negative', 'solarize', 'posterise', 'sketch',
+            'denoise', 'emboss', 'oilpaint', 'hatch', 'gpen', 'pastel',
+            'watercolor', 'film', 'saturation', 'colorswap', 'washedout',
+            'colorpoint', 'colorbalance', 'cartoon'},
+        'flip': {'none', 'vertical', 'horizontal', 'both'},
+        'uchannel': range(0, 255),
+        'ychannel': range(0, 255),
+        'drc_strength': {'off', 'low', 'medium', 'high'},
+        'meter_mode': {'average', 'spot', 'backlit', 'matrix'},
+        'video_denoise': {'on', 'off'},
+        'shutter_speed': range(0, 6000),
+        'led': {'off', 'on'},
+        'mutex': {'off', 'on'}
+    }
+
+    # Add these
+    DEFAULT_SETTINGS = {
+
+    }
+
+    LOCKED_WHEN_RECORDING = {
+        'resolution', 'quality', 'bitrate', 'framerate', 'drc_strength'
+    }
+
     def __init__(self):
         self.camera = None
-        self.locked_when_recording = {
-            'resolution', 'quality', 'bitrate', 'framerate', 'drc_strength'
-        }
 
         # What to do about framerate? Depends on res
-        self.allowed_values = {
-            'resolution': {'1080p', '720p', 'vga', 'auto'},
-            'quality': range(10, 40),
-            'bitrate': range(0, 25),
-            'framerate': range(0, 90),
-            'brightness': range(0, 100),
-            'saturation': range(-100, 100),
-            'sharpness': range(-100, 100),
-            'contrast': range(-100, 100),
-            'exposure_compensation': range(-25, 25),
-            'iso': range(0, 800),
-            'exposure_mode': {
-                'auto', 'night', 'nightpreview', 'backlight', 'spotlight',
-                'sports', 'snow', 'beach', 'verylong', 'fixedfps', 'antishake',
-                'fireworks'
-            },
-            'awb_mode': {
-                'auto', 'cloudy', 'shade', 'tungsten', 'fluorescent',
-                'incandescent', 'flash', 'horizon', 'sunlight', 'off'
-            },
-            'video_stabilization': {'off', 'on'},
-            'flash_mode': {
-                'off', 'on', 'redeye', 'auto', 'fillin', 'torch'
-            },
-            'image_effect': {
-                'none', 'negative', 'solarize', 'posterise', 'sketch',
-                'denoise', 'emboss', 'oilpaint', 'hatch', 'gpen', 'pastel',
-                'watercolor', 'film', 'saturation', 'colorswap', 'washedout',
-                'colorpoint', 'colorbalance', 'cartoon'
-            },
-            'flip': {
-                'none', 'vertical', 'horizontal', 'both'
-            },
-            'uchannel': range(0, 255),
-            'ychannel': range(0, 255),
-            'drc_strength': {'off', 'low', 'medium', 'high'},
-            'meter_mode': {'average', 'spot', 'backlit', 'matrix'},
-            'video_denoise': {'on', 'off'},
-            'shutter_speed': range(0, 6000),
-            'led': {'off', 'on'},
-            'mutex': {'off', 'on'}
-        }
-
         self.startup_params = {
             'resolution': '1080p',
             'quality': 25,
@@ -124,12 +127,12 @@ class CameraWrapper:
             return False
 
         # Invalid value
-        if value not in self.allowed_values[setting]:
+        if value not in CameraWrapper.ALLOWED_VALUES[setting]:
             print "invalid value for " + setting
             return False
 
         if self.is_recording():
-            if(setting in self.locked_when_recording):
+            if(setting in CameraWrapper.LOCKED_WHEN_RECORDING):
                 print "already recording"
                 return False
             else:
@@ -215,7 +218,8 @@ class CameraWrapper:
                 'awb-mode': str(self.camera.awb_mode),
                 'meter-mode': str(self.camera.meter_mode),
                 'flash-mode': str(self.camera.flash_mode),
-                'exposure_mode': str(self.camera.exposure_mode)
+                'exposure_mode': str(self.camera.exposure_mode),
+                'iso': str(self.camera.iso)
             }
         else:
             status = {'status': 'closed'}

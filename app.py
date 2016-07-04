@@ -6,9 +6,13 @@ camera = CameraWrapper()
 print("Starting....")
 
 
+# Add pan and tilt with zoom/center?
 @app.route('/')
 def hello_world():
-    return render_template('base.html')
+    return render_template(
+        'base.html',
+        recording=camera.is_recording(),
+        streaming=False)
 
 
 @app.route('/apply', methods=["POST", "GET"])

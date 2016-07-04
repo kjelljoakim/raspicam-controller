@@ -11,34 +11,6 @@ $(document).ready(function() {
   var $settings = $("form")
 
 
-
-  //TODO: Göt detta mha templates istället. Så syns ej övergången på knappen
-  $.ajax({
-    url: '/apply',
-    type: 'GET',
-    dataType: 'json',
-  })
-  .done(function(response) {
-    if(response.recording) {
-      var playBtn = $('#playBtn')
-      var button = $('#recBtn')
-      var icon = button.children(".glyphicon");
-      button.toggleClass('recording');
-      playBtn.prop('disabled', true)
-      button.addClass('btn-danger').removeClass('btn-default');
-      icon.addClass('glyphicon-stop').removeClass('glyphicon-record');
-      button.contents().slice(2).replaceWith(" Stop");
-      toggleOptionsOnRecord()
-    }
-  })
-  .fail(function() {
-    //TODO: Could not connect
-    console.log("error");
-  })
-  .always(function() {
-    //TODO: Spinning wheel/contacting camera
-  });
-
   $('#playBtn').click(function(event) {
     var button = $(this)
     var icon = button.children(".glyphicon");
@@ -60,25 +32,73 @@ $(document).ready(function() {
 
   $('#recBtn').on('click', function(event) {
     var button = $(this)
-    var icon = button.children(".glyphicon");
-    var playBtn = button.siblings('#playBtn');
-    button.toggleClass('recording');
-    if(button.hasClass('recording')) {
-      playBtn.prop('disabled', true)
-      button.addClass('btn-danger').removeClass('btn-default');
-      icon.addClass('glyphicon-stop').removeClass('glyphicon-record');
-      button.contents().slice(2).replaceWith(" Stop");
-      startRecording()
-    } else {
-      playBtn.prop("disabled", false);
-      button.addClass("btn-default").removeClass('btn-danger');
-      icon.addClass('glyphicon-record').removeClass('glyphicon-stop');
-      button.contents().slice(2).replaceWith(" Record");
-      stopRecording()
-    }
-    toggleOptionsOnRecord()
 
+    if(button.hasClass('recording')) {
+      stopRecording(button)
+    } else {
+      startRecording(button)
+    }
   });
+
+  function startRecording(recBtn) {
+    var icon = recBtn.children(".glyphicon");
+    var playBtn = recBtn.siblings('#playBtn');
+
+    $.ajax({
+      url: '/record',
+      type: 'POST',
+      dataType: 'json'
+    })
+    .done(function(response) {
+      if(response.recording) {
+        recBtn.addClass('recording');
+        playBtn.prop('disabled', true)
+        recBtn.addClass('btn-danger').removeClass('btn-default');
+        icon.addClass('glyphicon-stop').removeClass('glyphicon-record');
+        recBtn.contents().slice(2).replaceWith(" Stop");
+        toggleOptionsOnRecord()
+      } else {
+        alert("Recording not started due to failure!")
+      }
+    })
+    .fail(function() {
+      console.log("error");
+    })
+    .always(function() {
+      console.log("complete");
+    });
+
+  }
+
+  function stopRecording(recBtn) {
+    var icon = recBtn.children(".glyphicon");
+    var playBtn = recBtn.siblings('#playBtn');
+
+    $.ajax({
+      url: '/stopRecord',
+      type: 'POST',
+      dataType: 'json'
+    })
+    .done(function(response) {
+      if(response.stopped) {
+        recBtn.removeClass('recording')
+        playBtn.prop("disabled", false);
+        recBtn.addClass("btn-default").removeClass('btn-danger');
+        icon.addClass('glyphicon-record').removeClass('glyphicon-stop');
+        recBtn.contents().slice(2).replaceWith(" Record");
+        toggleOptionsOnRecord()
+      } else {
+        alert("Recording not stopped due to failure!")
+      }
+    })
+    .fail(function() {
+      console.log("error");
+    })
+    .always(function() {
+      console.log("complete");
+    });
+
+  }
 
   $("[name='resolution']").on('change', function(event) {
     //TODO: Gör en forEach och hidea bitrate också! Om det ska vara så
@@ -147,7 +167,7 @@ $(document).ready(function() {
     }
     //Exposure modes are only available if ISO == 0 (auto)
     if(slider.attr("name") == "iso") {
-      var exposure = $("[name='exposure']")
+      var exposure = $("[name='exposure_mode']")
       var alert = exposure.siblings('#iso-alert')
       if(slider.val() != 0 || box.val() != 0) {
         exposure.addClass('hidden')
@@ -234,49 +254,7 @@ $(document).ready(function() {
     //snurrande grej
   }
 
-  function startRecording() {
-    $.ajax({
-      url: '/record',
-      type: 'POST',
-      dataType: 'json'
-    })
-    .done(function(response) {
-      if(response.recording) {
-        console.log("Recording started...")
-      } else {
-        console.log("Recording not started due to failure!")
-      }
-    })
-    .fail(function() {
-      console.log("error");
-    })
-    .always(function() {
-      console.log("complete");
-    });
 
-  }
-
-  function stopRecording() {
-    $.ajax({
-      url: '/stopRecord',
-      type: 'POST',
-      dataType: 'json'
-    })
-    .done(function(response) {
-      if(response.stopped) {
-        console.log("Recording stopped!")
-      } else {
-        console.log("Recording not stopped due to failure!")
-      }
-    })
-    .fail(function() {
-      console.log("error");
-    })
-    .always(function() {
-      console.log("complete");
-    });
-
-  }
 
   function findMinMax(name) {
     var element = $("[name='"+name+"']")

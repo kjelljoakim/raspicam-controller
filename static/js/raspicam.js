@@ -8,9 +8,35 @@ $(document).ready(function() {
 
   var $sliders = $("[type='range']")
   var $numberBoxes = $(".slider-text")
+  var $settings = $("form")
 
-  $(window).on('resize', function(event) {
-    //TODO: Fixa col-md problem här. Mindre knappar osv. Hide
+
+
+  //TODO: Göt detta mha templates istället. Så syns ej övergången på knappen
+  $.ajax({
+    url: '/apply',
+    type: 'GET',
+    dataType: 'json',
+  })
+  .done(function(response) {
+    if(response.recording) {
+      var playBtn = $('#playBtn')
+      var button = $('#recBtn')
+      var icon = button.children(".glyphicon");
+      button.toggleClass('recording');
+      playBtn.prop('disabled', true)
+      button.addClass('btn-danger').removeClass('btn-default');
+      icon.addClass('glyphicon-stop').removeClass('glyphicon-record');
+      button.contents().slice(2).replaceWith(" Stop");
+      toggleOptionsOnRecord()
+    }
+  })
+  .fail(function() {
+    //TODO: Could not connect
+    console.log("error");
+  })
+  .always(function() {
+    //TODO: Spinning wheel/contacting camera
   });
 
   $('#playBtn').click(function(event) {
@@ -42,13 +68,16 @@ $(document).ready(function() {
       button.addClass('btn-danger').removeClass('btn-default');
       icon.addClass('glyphicon-stop').removeClass('glyphicon-record');
       button.contents().slice(2).replaceWith(" Stop");
+      startRecording()
     } else {
       playBtn.prop("disabled", false);
       button.addClass("btn-default").removeClass('btn-danger');
       icon.addClass('glyphicon-record').removeClass('glyphicon-stop');
       button.contents().slice(2).replaceWith(" Record");
+      stopRecording()
     }
     toggleOptionsOnRecord()
+
   });
 
   $("[name='resolution']").on('change', function(event) {
@@ -122,9 +151,11 @@ $(document).ready(function() {
       var alert = exposure.siblings('#iso-alert')
       if(slider.val() != 0 || box.val() != 0) {
         exposure.addClass('hidden')
+        exposure.prop('disabled', true)
         alert.removeClass('hidden')
       } else if(exposure.hasClass('hidden')) {
         exposure.removeClass('hidden')
+        exposure.prop('disabled', false)
         alert.addClass('hidden')
       }
     }
@@ -158,31 +189,39 @@ $(document).ready(function() {
       var value = Number(setting.value)
       if(value < min || value > max) {
         alert("FIXA ALERT MODAL!")
+        //Eller disable apply tidigare, så fort en setting är fel?
         validSettings = false
         return false
       }
     });
     if(validSettings) {
-      var settings = $("form").serializeArray();
-      console.log(JSON.stringify(settings))
-      applySettingsAsync(settings)
+      var newSettings = $settings.serializeArray()
+      applySettingsAsync(newSettings)
+    } else {
+      //Använd den i each loopen. Eftersom det går att skriva ut vilken som är fel då (Första)
+      //Så ta bort denna else
+      alert("Some settings are poopy!")
     }
   });
 
   function applySettingsAsync(settings) {
+    //Check setttings om valid, annars modal/alert
+    //ELler nej, gör appybtn disabled/alert över om någon setting är fel.
     console.log("Sending AJAX")
     $.ajax({
-      url: '/record',
+      url: '/apply',
       type: 'POST',
       dataType: 'json',
       data: JSON.stringify(settings),
       contentType: 'application/json'
     })
     .done(function(response) {
-      console.log("success");
-      if(response.recording) {
-        //startRecording
+      console.log("received response");
+      console.log(response.applied)
+      if(response.applied) {
+          //Ta bort spinning
       } else {
+        console.log(response.error)
         //modal Alert
       }
     })
@@ -190,19 +229,53 @@ $(document).ready(function() {
       console.log("error");
     })
     .always(function(response) {
-      console.log(response);
+      console.log("always");
+    });
+    //snurrande grej
+  }
+
+  function startRecording() {
+    $.ajax({
+      url: '/record',
+      type: 'POST',
+      dataType: 'json'
+    })
+    .done(function(response) {
+      if(response.recording) {
+        console.log("Recording started...")
+      } else {
+        console.log("Recording not started due to failure!")
+      }
+    })
+    .fail(function() {
+      console.log("error");
+    })
+    .always(function() {
+      console.log("complete");
     });
 
-    console.log("direkt")
+  }
 
-    // $.post('/record', {"firstName": "Joakim", "lastName": "Karlsson"}, function(response) {
-    //   console.log("success")
-    //   if(response.recording) {
-    //     console.log("true")
-    //   } else {
-    //     console.log("false")
-    //   }
-    // }, "json");
+  function stopRecording() {
+    $.ajax({
+      url: '/stopRecord',
+      type: 'POST',
+      dataType: 'json'
+    })
+    .done(function(response) {
+      if(response.stopped) {
+        console.log("Recording stopped!")
+      } else {
+        console.log("Recording not stopped due to failure!")
+      }
+    })
+    .fail(function() {
+      console.log("error");
+    })
+    .always(function() {
+      console.log("complete");
+    });
+
   }
 
   function findMinMax(name) {
@@ -222,8 +295,15 @@ $(document).ready(function() {
   function toggleOptionsOnRecord() {
     var options = $(".disable-when-recording")
     options.each(function(index, element) {
-      $(element).toggleClass('hidden')
-      $(element).siblings('.rec-alert').toggleClass('hidden')
+      var $element = $(element)
+      //Toggles disabled value for inputs.
+      if($element.hasClass("dropdowns")) {
+        $element.prop('disabled', function(i, v) { return !v; });
+      } else {
+        $element.find('input').prop('disabled', function(i, v) { return !v; });
+      }
+      $element.toggleClass('hidden')
+      $element.siblings('.rec-alert').toggleClass('hidden')
     });
   }
 

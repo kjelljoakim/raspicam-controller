@@ -78,13 +78,13 @@
                     <div class="resolution-btn-group btn-group disable-when-recording" data-toggle="buttons">
                       <!-- TODO: Varför är dessa labels? -->
                       <label class="btn btn-default btn-lg">1080p
-                        <input type="radio" name="resolution" id="1080p" value="1080" autocomplete="off">
+                        <input type="radio" name="resolution" id="1080p" value="1080p" autocomplete="off">
                       </label>
                       <label class="btn btn-default active btn-lg">720p
-                        <input type="radio" name="resolution" id="720p" value="720" autocomplete="off" checked>
+                        <input type="radio" name="resolution" id="720p" value="720p" autocomplete="off" checked>
                       </label>
                       <label class="btn btn-default btn-lg">480p
-                        <input type="radio" name="resolution" id="480p" value="480" autocomplete="off">
+                        <input type="radio" name="resolution" id="480p" value="vga" autocomplete="off">
                       </label>
                       <label class="btn btn-default btn-lg">Auto
                         <input type="radio" name="resolution" id="auto-res" value="auto" autocomplete="off">
@@ -158,7 +158,7 @@
                   <div class="col-xs-12 col-sm-6 col-lg-4">
                     <h4>EV Compensation:</h4>
                     <div class="form-group has-success">
-                      <input type="range" name="ev" min="-25" max="25" value="0">
+                      <input type="range" name="exposure_compensation" min="-25" max="25" value="0">
                       <input type="number" class="slider-text form-control"min="-25" max="25" value="0" required>
                     </div>
                   </div>
@@ -173,7 +173,7 @@
 
                   <div class="col-xs-6 col-sm-3 col-lg-2">
                     <h4>Exposure Mode:</h4>
-                    <select class="form-control dropdowns" name="exposure">
+                    <select class="form-control dropdowns" name="exposure_mode">
                       <option selected>auto</option>
                       <option>night</option>
                       <option>nightpreview</option>
@@ -192,11 +192,11 @@
 
                   <div class="col-xs-6 col-sm-3 col-lg-2">
                     <h4>AWB Mode:</h4>
-                    <select class="form-control dropdowns" name="awb">
+                    <select class="form-control dropdowns" name="awb_mode">
                       <option>off</option>
                       <option selected>auto</option>
-                      <option>sun</option>
-                      <option>cloud</option>
+                      <option>sunlight</option>
+                      <option>cloudy</option>
                       <option>shade</option>
                       <option>tungsten</option>
                       <option>fluorescent</option>
@@ -208,7 +208,7 @@
 
                   <div class="col-xs-7 col-sm-4 col-lg-2">
                     <h4>Video Stabilisation:</h4>
-                    <select class="form-control dropdowns" name="vstab">
+                    <select class="form-control dropdowns" name="video_stabilization">
                       <option>on</option>
                       <option selected>off</option>
                     </select>
@@ -216,7 +216,7 @@
 
                   <div class="col-xs-5 col-sm-2 col-lg-2">
                     <h4>Flash:</h4>
-                    <select class="form-control dropdowns" name="flash">
+                    <select class="form-control dropdowns" name="flash_mode">
                       <option selected>off</option>
                       <option>auto</option>
                       <option>on</option>
@@ -248,13 +248,11 @@
                       <div class="col-xs-6">
                         <!-- TODO: Ta bort de som inte stödjer video eller lägg till alerts på dessa om bilder ska stödjas.-->
                         <h4>Image effect:</h4>
-                        <select class="form-control dropdowns" name="image-effects">
+                        <select class="form-control dropdowns" name="image_effect">
                           <option selected>none</option>
                           <option>negative</option>
-                          <option>solarise</option>
+                          <option>solarize</option>
                           <option>posterise</option>
-                          <option>whiteboard</option>
-                          <option>blackboard</option>
                           <option>sketch</option>
                           <option>denoise</option>
                           <option>emboss</option>
@@ -262,13 +260,13 @@
                           <option>hatch</option>
                           <option>gpen</option>
                           <option>pastel</option>
-                          <option>watercolour</option>
+                          <option>watercolor</option>
                           <option>film</option>
                           <option>saturation</option>
-                          <option>colourswap</option>
+                          <option>colorswap</option>
                           <option>washedout</option>
-                          <option>colourpoint</option>
-                          <option>colourbalance</option>
+                          <option>colorpoint</option>
+                          <option>colorbalance</option>
                           <option>cartoon</option>
                         </select>
                       </div>
@@ -276,9 +274,9 @@
                         <h4>Flip image:</h4>
                         <select class="form-control dropdowns" name="flip">
                           <option selected>none</option>
-                          <option>Horizontal flip</option>
-                          <option>Vertical flip</option>
-                          <option>Both</option>
+                          <option>horizontal</option>
+                          <option>vertical</option>
+                          <option>both</option>
                         </select>
                       </div>
                     </div>
@@ -321,7 +319,7 @@
                 <div class="row">
                   <div class="col-xs-12 col-sm-6 col-lg-4">
                     <h4>Dynamic Range Compression:</h4>
-                    <select class="disable-when-recording form-control dropdowns" name="drc">
+                    <select class="disable-when-recording form-control dropdowns" name="drc_strength">
                       <option selected>off</option>
                       <option>low</option>
                       <option>medium</option>
@@ -332,7 +330,7 @@
 
                   <div class="col-xs-6 col-sm-3 col-lg-2">
                     <h4>Metering mode:</h4>
-                    <select class="form-control dropdowns" name="metering">
+                    <select class="form-control dropdowns" name="meter_mode">
                       <option selected>average</option>
                       <option>spot</option>
                       <option>backlit</option>
@@ -342,7 +340,7 @@
 
                   <div class="col-xs-6 col-sm-3 col-lg-2">
                     <h4>Image denoise:</h4>
-                    <select class="form-control dropdowns" name="denoise">
+                    <select class="form-control dropdowns" name="video_denoise">
                       <option selected>on</option>
                       <option>off</option>
                     </select>
@@ -353,7 +351,7 @@
                   <div class="col-xs-12 col-sm-6 col-lg-4">
                     <div class="form-group has-success">
                       <h4>Shutter speed (milliseconds):</h4>
-                      <input type="range" name="shutter" min="0" max="6000" step="100" value="0">
+                      <input type="range" name="shutter_speed" min="0" max="6000" step="100" value="0">
                       <input type="number" class="slider-text form-control"min="0" max="6000" value="0" required>
                     </div>
                   </div>
